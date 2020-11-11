@@ -1,0 +1,91 @@
+<ion-header>
+    <ion-buttons slot="start">
+        <ion-back-button text="" icon="add"></ion-back-button>
+    </ion-buttons>
+    <div class="login-header ion-padding">
+        <img class="logo-img" src="assets/images/detaillogo.png">
+    </div>
+</ion-header>
+<ion-content>
+    <ion-grid class="ion-margin-top ion-text-center">
+        <ion-row>
+            <ion-col *ngFor="let d of details | orderBy: 'Name'">
+                <ion-card>
+                    <ion-item class="ion-activated" color="tertiary">
+                        <ion-icon name="restaurant-outline" slot="start"></ion-icon>
+                        <ion-text>{{d.Quantity}}x {{d.Name}} </ion-text>
+                    </ion-item>
+                    <ion-item class="ion-activated" color="primary">
+                        <ion-icon name="cash-outline" slot="start"></ion-icon>
+                        <ion-label>{{d.Quantity}} x {{d.Price}} = {{d.Quantity * d.Price}} {{d.Currency}}</ion-label>
+                    </ion-item>
+                    <ion-item class="ion-activated" color="light" *ngIf="d.Note  !== null">
+                        <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                        <ion-text>{{d.Note}} </ion-text>
+                    </ion-item>
+                    <ion-list *ngFor="let o of d.OrdersOrderses_IngredientIngredients | orderBy: 'Name'">
+                        <ion-item *ngIf="o.Ingredient.FreeOrNot  === false">
+                            <ion-label>{{o.Ingredient.Name}} {{o.Ingredient.Price}}</ion-label>
+                            <ion-checkbox slot="start" color="primary" [checked]="true"></ion-checkbox>
+                        </ion-item>
+                    </ion-list>
+                    <ion-list *ngFor="let o of d.OrdersOrderses_IngredientIngredients | orderBy: 'Name'">
+                        <ion-item *ngIf="o.Ingredient.FreeOrNot">
+                            <ion-label>{{o.Ingredient.Name}} <span>+{{o.Ingredient.Price * d.Quantity  | number}} {{d.Currency}}</span></ion-label>
+                            <ion-checkbox slot="start" color="danger" [checked]="true"></ion-checkbox>
+                        </ion-item>
+                    </ion-list>
+                    <ion-item class="ion-activated" color="tertiary">
+                        <ion-icon name="calculator-outline" slot="start"></ion-icon>
+                        <ion-text><b>Total:</b> {{d.TotalPrice | number}} {{d.Currency}}</ion-text>
+                    </ion-item>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+        <ion-row>
+            <ion-grid>
+                <ion-item color="warning">
+                    <ion-label class="ion-text-center bd"><b>Total:</b> {{totalPrice.toString() | number: '1.1-5'}} {{currency}}</ion-label>
+                </ion-item>
+            </ion-grid>
+        </ion-row>
+    </ion-grid>
+    <ion-grid>
+        <ion-row>
+            <ion-grid>
+                <ion-item color="danger" *ngIf="orderMain?.PaymentState === 0">
+                    <ion-label class="ion-text-center bd"><b>Not Paid</b></ion-label>
+                </ion-item>
+                <ion-item color="success" *ngIf="orderMain?.PaymentState === 1">
+                    <ion-label class="ion-text-center bd"><b>Paid</b></ion-label>
+                </ion-item>
+            </ion-grid>
+        </ion-row>
+    </ion-grid>
+    <ion-grid>
+        <ion-row>
+            <ion-col>
+                <ion-item>
+                    <ion-label>Payment</ion-label>
+                    <ion-select value="notifications" interface="action-sheet" [(ngModel)]="payment" (ionChange)="pay(details)">
+                        <ion-select-option value="0">Not Paid</ion-select-option>
+                        <ion-select-option value="1">Paid</ion-select-option>
+                    </ion-select>
+                </ion-item>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+    <ion-button *ngIf="orderMain?.PrepareState === 0 && orderMain?.Confirmation === false" class="ion-padding-horizontal" fill="solid" color="primary" expand="block" (click)="sendToKitchen(details)">
+        Send to kitchen
+    </ion-button>
+    <ion-button *ngIf="orderMain?.Complete === false && orderMain?.PrepareState === 2" class="ion-padding-horizontal ion-margin-bottom" fill="solid" color="success" expand="block" (click)="completed(details)">
+        Completed
+    </ion-button>
+    <!--<ion-button class="ion-padding-horizontal" fill="solid" color="danger" expand="block" (click)="delete(details)">
+        Delete
+    </ion-button>-->
+</ion-content>

@@ -1,0 +1,112 @@
+<ion-header>
+    <div class="login-header ion-padding">
+        <img class="logo-img" src="assets/images/kitchen.png">
+    </div>
+</ion-header>
+
+<ion-content class="ion-padding ">
+    <ion-segment [(ngModel)]="selectedTabs" color="primary">
+        <ion-segment-button value="orders">
+            <ion-label>Orders</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="orderdetails">
+            <ion-label>Prepared Orders</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+    <div *ngIf="selectedTabs === 'orders'">
+        <div class="header">
+            <h4 class="ion-text-center">Confirmed Orders</h4>
+        </div>
+
+        <ion-grid class="ion-no-padding">
+            <ion-row >
+                <ion-col *ngFor="let o of confirmed | orderBy: 'Queue': true ">
+                    <ion-card (click)="getDetail(o.Oid)">
+                        <ion-item class="ion-activated" color="secondary">
+                            <ion-label class="ion-float-left">{{o.Name}}</ion-label>
+                            <ion-label class="ion-float-right ion-text-right">{{o.Date | dateAgo}}</ion-label>
+                        </ion-item>
+                        <ion-item *ngIf="o.Note !== ''" class="ion-activated" color="light">
+                            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                            <ion-label>{{o.Note}} </ion-label>
+                        </ion-item>
+                        <ion-item *ngFor="let od of o.Orders">
+                            <ion-icon name="fast-food-outline" slot="start"></ion-icon>
+                            <ion-label>{{od.Quantity}}x {{od.Name}}</ion-label>
+                        </ion-item>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+
+        <div class="header">
+            <h4 class="ion-text-center">Preparing Orders</h4>
+        </div>
+        <ion-grid class="ion-no-padding">
+            <ion-row >
+                <ion-col *ngFor="let o of preparing | orderBy: 'Queue': true ">
+                    <ion-card (click)="getDetail(o.Oid)">
+                        <ion-item class="ion-activated" color="tertiary">
+                            <ion-label class="ion-float-left">{{o.Name}}</ion-label>
+                            <ion-label class="ion-float-right ion-text-right">{{o.Date | dateAgo}}</ion-label>
+                        </ion-item>
+                        <ion-item *ngIf="o.Note !== ''" class="ion-activated" color="light">
+                            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                            <ion-label>{{o.Note}} </ion-label>
+                        </ion-item>
+                        <ion-item *ngFor="let od of o.Orders">
+                            <ion-icon name="fast-food-outline" slot="start"></ion-icon>
+                            <ion-label>{{od.Quantity}}x {{od.Name}}</ion-label>
+                        </ion-item>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+    <div *ngIf="selectedTabs === 'orderdetails'">
+        <div class="header">
+            <h4 class="ion-text-center">Prepared Orders</h4>
+        </div>
+        <ion-grid class="ion-no-padding">
+            <ion-row>
+                <ion-col *ngFor="let o of prepared | orderBy: 'Queue': true  | slice:0:10">
+                    <ion-card (click)="getDetail(o.Oid)">
+                        <ion-item class="ion-activated" color="success">
+                            <ion-label class="ion-float-left">{{o.Name}}</ion-label>
+                            <ion-label class="ion-float-right ion-text-right">{{o.Date | dateAgo}}</ion-label>
+                        </ion-item>
+                        <ion-item *ngIf="o.Note !== ''" class="ion-activated" color="light">
+                            <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                            <ion-label>{{o.Note}} </ion-label>
+                        </ion-item>
+                        <ion-item *ngFor="let od of o.Orders">
+                            <ion-icon name="fast-food-outline" slot="start"></ion-icon>
+                            <ion-label>{{od.Quantity}}x {{od.Name}}</ion-label>
+                        </ion-item>
+                    </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+
+    </div>
+</ion-content>
+
+<!--
+<ion-card *ngIf="o.PrepareState === 2" (click)="getDetail(o.Oid)">
+  <ion-item class="ion-activated">
+    <ion-icon name="wifi" slot="start"></ion-icon>
+    <ion-label>{{o.Table1.Name}}</ion-label>
+  </ion-item>
+
+  <ion-item>
+    <ion-icon name="wine" slot="start"></ion-icon>
+    <ion-label>{{o.Date}}</ion-label>
+  </ion-item>
+
+  <ion-item class="ion-activated">
+    <ion-icon name="warning" slot="start"></ion-icon>
+    <ion-label>Card Button Item 1 activated</ion-label>
+  </ion-item>
+
+</ion-card>-->

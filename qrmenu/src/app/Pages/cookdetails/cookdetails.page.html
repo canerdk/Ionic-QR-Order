@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-buttons slot="start">
+    <ion-back-button text="" icon="add"></ion-back-button>
+  </ion-buttons>
+  <div class="login-header ion-padding">
+    <img class="logo-img" src="assets/images/detaillogo.png">
+  </div>
+</ion-header>
+<ion-content>
+    <ion-grid class="ion-text-center">
+        <ion-row>
+            <ion-col *ngFor="let d of details | orderBy: 'Name'">
+                <ion-card>
+                    <ion-item class="ion-activated" color="tertiary">
+                        <ion-icon name="restaurant-outline" slot="start"></ion-icon>
+                        <ion-text>{{d.Quantity}}x {{d.Name}} </ion-text>
+                    </ion-item>
+                    <ion-item class="ion-activated" color="light" *ngIf="d.Note  !== null">
+                        <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                        <ion-text>{{d.Note}}</ion-text>
+                    </ion-item>
+                    <ion-list *ngFor="let o of d.OrdersOrderses_IngredientIngredients | orderBy: 'Name'">
+                        <ion-item *ngIf="o.Ingredient.FreeOrNot  === false">
+                            <ion-label>{{o.Ingredient.Name}} {{o.Ingredient.Price}}</ion-label>
+                            <ion-checkbox slot="start" color="primary" [checked]="true"></ion-checkbox>
+                        </ion-item>
+                    </ion-list>
+                    <ion-list *ngFor="let o of d.OrdersOrderses_IngredientIngredients | orderBy: 'Name'">
+                        <ion-item *ngIf="o.Ingredient.FreeOrNot">
+                            <ion-label>{{o.Ingredient.Name}} <span>+{{o.Ingredient.Price * d.Quantity}} {{d.Currency}}</span></ion-label>
+                            <ion-checkbox slot="start" color="danger" [checked]="true"></ion-checkbox>
+                        </ion-item>
+                    </ion-list>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+
+
+<!--  <ion-grid class="ion-margin-top ion-text-center">
+    <ion-row *ngFor="let d of details | orderBy: 'Name'">
+        <ion-card >
+            <ion-item class="ion-activated" color="dark">
+                <ion-icon name="restaurant-outline" slot="start"></ion-icon>
+                <ion-label>{{d.Quantity}}x {{d.Name}} </ion-label>
+            </ion-item>
+            <ion-item *ngIf="d.Note !== null || d.Note === ''" class="ion-activated" color="light">
+                <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                <ion-label>{{d.Note}} </ion-label>
+            </ion-item>
+            <ion-list>
+                <ion-item *ngFor="let o of d.OrdersOrderses_IngredientIngredients | orderBy: 'FreeOrNot'">
+                    <ion-label>{{o.Ingredient.Name}}</ion-label>
+                    <ion-checkbox slot="start" color="danger" [checked]="true" ></ion-checkbox>
+                </ion-item>
+            </ion-list>
+        </ion-card>
+    </ion-row>
+  </ion-grid>-->
+  <ion-button class="ion-padding-horizontal ion-margin-bottom" fill="solid" color="tertiary" expand="block" (click)="preparing(details)">
+    Preparing
+  </ion-button>
+  <ion-button class="ion-padding-horizontal" fill="solid" color="success" expand="block" (click)="prepared(details)">
+    Prepared
+  </ion-button>
+  <!--    <ion-button class="ion-padding-horizontal" fill="solid" color="danger" expand="block" (click)="delete(details)">
+          Delete
+      </ion-button>-->
+
+</ion-content>
